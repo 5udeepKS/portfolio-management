@@ -6,14 +6,21 @@ import { loginUserAsync } from "../../redux/authSlice";
 export default function Login(props) {
   const { setSnackbarProps } = props;
   const dispatch = useDispatch();
-  const [formValues, setFormValues] = useState({
+
+  const initialFormValues = {
     username: "",
     password: "",
-  });
+  };
+
+  const [formValues, setFormValues] = useState(initialFormValues);
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
     setFormValues({ ...formValues, [name]: value });
+  };
+
+  const handleReset = () => {
+    setFormValues(initialFormValues);
   };
 
   const handleSubmit = async (e) => {
@@ -88,7 +95,12 @@ export default function Login(props) {
             <Button variant="outlined" type="submit">
               Login
             </Button>
-            <Button sx={{ mx: 2 }} variant="outlined" color="secondary">
+            <Button
+              onClick={handleReset}
+              sx={{ mx: 2 }}
+              variant="outlined"
+              color="secondary"
+            >
               Reset
             </Button>
           </Box>

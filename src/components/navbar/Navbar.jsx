@@ -14,7 +14,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { loggedInLinks, loggedOutLinks } from "./navLinks";
+import { loggedInLinks, loggedOutLinks } from "../../assets/links/navLinks";
 import { logOut } from "../../redux/authSlice";
 
 export default function Navbar() {
