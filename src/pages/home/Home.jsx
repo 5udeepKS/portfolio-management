@@ -1,6 +1,10 @@
 import React from "react";
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 export default function Home() {
+  const navigate = useNavigate();
+
   const cardContent = [
     {
       title: "Authorization",
@@ -45,7 +49,14 @@ export default function Home() {
           "World class consumer & trends research capabilities. We design for
           tommorrow customers in tommorrow market"
         </Typography>
-        <Button variant="contained">Get Started</Button>
+        <Button
+          onClick={() => {
+            navigate("/login");
+          }}
+          variant="contained"
+        >
+          Get Started
+        </Button>
       </Box>
       <Box
         sx={{

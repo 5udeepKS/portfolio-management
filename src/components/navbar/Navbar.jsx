@@ -12,13 +12,17 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
-import { links } from "./navLinks";
+import { loggedInLinks, loggedOutLinks } from "./navLinks";
+import { logOut } from "../../redux/authSlice";
 
 export default function Navbar() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [anchorElNav, setAnchorElNav] = useState(null);
+  const links = isLoggedIn ? loggedInLinks : loggedOutLinks;
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -62,7 +66,16 @@ export default function Navbar() {
               }}
             >
               {links.map((link, idx) => (
-                <MenuItem key={idx} onClick={handleCloseNavMenu}>
+                <MenuItem
+                  key={idx}
+                  onClick={() => {
+                    if (link.text === "Log Out") {
+                      dispatch(logOut());
+                    }
+                    navigate(link.path);
+                    handleCloseNavMenu();
+                  }}
+                >
                   <Typography textAlign="center">{link.text}</Typography>
                 </MenuItem>
               ))}
@@ -110,7 +123,12 @@ export default function Navbar() {
               {links.map((link, idx) => (
                 <Button
                   key={idx}
-                  onClick={handleCloseNavMenu}
+                  onClick={() => {
+                    if (link.text === "Log Out") {
+                      dispatch(logOut());
+                    }
+                    navigate(link.path);
+                  }}
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
                   {link.text}

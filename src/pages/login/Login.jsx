@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Box, Paper, TextField, Button } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { loginUserAsync } from "../../redux/authSlice";
 
-export default function Login() {
+export default function Login(props) {
+  const { setSnackbarProps } = props;
+  const dispatch = useDispatch();
   const [formValues, setFormValues] = useState({
     username: "",
     password: "",
@@ -12,10 +16,26 @@ export default function Login() {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     console.log(formValues);
+    await dispatch(loginUserAsync(formValues))
+      .unwrap()
+      .then(() => {
+        setSnackbarProps({
+          open: true,
+          msg: "Logged In Successfully",
+          severity: "success",
+        });
+      })
+      .catch(() => {
+        setSnackbarProps({
+          open: true,
+          msg: "Invalid Credentials",
+          severity: "error",
+        });
+      });
   };
 
   return (
