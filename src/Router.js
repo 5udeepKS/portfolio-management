@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
+import Auth from "./auth/Auth";
 import Home from "./pages/home/Home";
 import NotFound from "./pages/notFound/NotFound";
 import Login from "./pages/login/Login";
 import Dashboard from "./pages/dashboard/Dashboard";
-
 import Snackbar from "./components/snackbar/Snackbar";
 
 export default function Router() {
@@ -30,7 +30,14 @@ export default function Router() {
           path="/login"
           element={<Login setSnackbarProps={setSnackbarProps} />}
         />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Auth>
+              <Dashboard />
+            </Auth>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Snackbar

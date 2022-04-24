@@ -3,18 +3,25 @@ import ReactDOM from "react-dom/client";
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
 import App from "./App";
 import { store } from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+let persistor = persistStore(store);
+
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <CssBaseline />
       <Provider store={store}>
-        <App />
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </BrowserRouter>
   </React.StrictMode>

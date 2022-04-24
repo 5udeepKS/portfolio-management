@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Home() {
   const navigate = useNavigate();
+
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const cardContent = [
     {
