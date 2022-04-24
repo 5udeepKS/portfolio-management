@@ -1,13 +1,9 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 
-import Navbar from "../../components/navbar/Navbar";
-import Footer from "../../components/footer/Footer";
-
 export default function NotFound() {
   return (
     <>
-      <Navbar />
       <Box
         sx={{
           position: "absolute",
@@ -18,7 +14,6 @@ export default function NotFound() {
       >
         <Typography variant="h2">404 Page Not Found</Typography>
       </Box>
-      <Footer />
     </>
   );
 }

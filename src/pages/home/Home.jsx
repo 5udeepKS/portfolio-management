@@ -1,6 +1,4 @@
 import React from "react";
-import Navbar from "../../components/navbar/Navbar";
-import Footer from "../../components/footer/Footer";
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 export default function Home() {
   const cardContent = [
@@ -22,75 +20,71 @@ export default function Home() {
     },
   ];
   return (
-    <>
-      <Navbar />
-      <Container
+    <Container
+      sx={{
+        height: "80vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        backgroundColor: "#0000000f",
+      }}
+    >
+      <Box
         sx={{
-          height: "80vh",
+          flex: 1,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          backgroundColor: "#0000000f",
+          justifyContent: "space-evenly",
+          alignItems: "center",
         }}
       >
-        <Box
-          sx={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-evenly",
-            alignItems: "center",
-          }}
+        <Typography
+          variant="overline"
+          sx={{ fontSize: "1rem", width: "70%", textAlign: "center" }}
         >
-          <Typography
-            variant="overline"
-            sx={{ fontSize: "1rem", width: "70%", textAlign: "center" }}
+          "World class consumer & trends research capabilities. We design for
+          tommorrow customers in tommorrow market"
+        </Typography>
+        <Button variant="contained">Get Started</Button>
+      </Box>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-evenly",
+        }}
+      >
+        {cardContent.map((content, idx) => (
+          <Paper
+            key={idx}
+            elevation={5}
+            sx={{
+              width: "20%",
+              height: "90%",
+              display: "flex",
+              alignItems: "center",
+            }}
           >
-            "World class consumer & trends research capabilities. We design for
-            tommorrow customers in tommorrow market"
-          </Typography>
-          <Button variant="contained">Get Started</Button>
-        </Box>
-        <Box
-          sx={{
-            flex: 1,
-            display: "flex",
-            width: "100%",
-            justifyContent: "space-evenly",
-          }}
-        >
-          {cardContent.map((content, idx) => (
-            <Paper
-              key={idx}
-              elevation={5}
+            <Box
               sx={{
-                width: "20%",
-                height: "90%",
+                mx: 2,
+                height: "50%",
                 display: "flex",
+                flexDirection: "column",
                 alignItems: "center",
               }}
             >
-              <Box
-                sx={{
-                  mx: 2,
-                  height: "50%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <Typography variant="h6" sx={{ color: "primary.dark" }}>
-                  {content.title}
-                </Typography>
-                <Typography sx={{ my: 1, textAlign: "center" }}>
-                  {content.description}
-                </Typography>
-              </Box>
-            </Paper>
-          ))}
-        </Box>
-      </Container>
-      <Footer />
-    </>
+              <Typography variant="h6" sx={{ color: "primary.dark" }}>
+                {content.title}
+              </Typography>
+              <Typography sx={{ my: 1, textAlign: "center" }}>
+                {content.description}
+              </Typography>
+            </Box>
+          </Paper>
+        ))}
+      </Box>
+    </Container>
   );
 }
