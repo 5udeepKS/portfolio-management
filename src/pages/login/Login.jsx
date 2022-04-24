@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Box, Paper, TextField, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import { loginUserAsync } from "../../redux/authSlice";
 
 export default function Login(props) {
   const { setSnackbarProps } = props;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const initialFormValues = {
     username: "",
@@ -25,8 +28,6 @@ export default function Login(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(formValues);
     await dispatch(loginUserAsync(formValues))
       .unwrap()
       .then(() => {
@@ -35,6 +36,7 @@ export default function Login(props) {
           msg: "Logged In Successfully",
           severity: "success",
         });
+        navigate("/dashboard");
       })
       .catch(() => {
         setSnackbarProps({
