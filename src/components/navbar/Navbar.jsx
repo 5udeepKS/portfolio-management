@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Box,
@@ -11,11 +11,14 @@ import {
   MenuItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useNavigate } from "react-router-dom";
 
 import { links } from "./navLinks";
 
 export default function Navbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const navigate = useNavigate();
+
+  const [anchorElNav, setAnchorElNav] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -69,7 +72,13 @@ export default function Navbar() {
             variant="h6"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
+            sx={{
+              flexGrow: 1,
+              display: { xs: "flex", md: "none" },
+            }}
+            onClick={() => {
+              navigate("/");
+            }}
           >
             PORTFOLIO MANAGEMENT
           </Typography>
@@ -86,7 +95,14 @@ export default function Navbar() {
               variant="h6"
               noWrap
               component="div"
-              sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                navigate("/");
+              }}
             >
               PORTFOLIO MANAGEMENT
             </Typography>

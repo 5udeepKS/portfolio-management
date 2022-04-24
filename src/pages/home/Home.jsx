@@ -59,8 +59,9 @@ export default function Home() {
             justifyContent: "space-evenly",
           }}
         >
-          {cardContent.map((content) => (
+          {cardContent.map((content, idx) => (
             <Paper
+              key={idx}
               elevation={5}
               sx={{
                 width: "20%",
