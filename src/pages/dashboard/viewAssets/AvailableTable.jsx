@@ -93,7 +93,7 @@ export default function AvailableTable(props) {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page >= 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page >= 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length - 1) : 0;
 
   return (
     <Box
@@ -105,7 +105,7 @@ export default function AvailableTable(props) {
         alignItems: "center",
       }}
     >
-      <Paper sx={{ width: "90%", height: "90%", mb: 2 }} elevation={5}>
+      <Paper sx={{ width: "90%", height: "100%", mb: 2 }} elevation={5}>
         <EnhancedTableToolbar setPage={setPage} type={type} />
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table
@@ -119,6 +119,7 @@ export default function AvailableTable(props) {
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
+                  const item = Object.keys(row);
                   return (
                     <TableRow hover tabIndex={-1} key={index}>
                       <TableCell
@@ -127,10 +128,10 @@ export default function AvailableTable(props) {
                         padding="none"
                         align="center"
                       >
-                        {row[0]}
+                        {item[0]}
                       </TableCell>
-                      <TableCell align="left">{row[0]}</TableCell>
-                      <TableCell align="left">{row[2]}</TableCell>
+                      <TableCell align="center">{item[1]}</TableCell>
+                      <TableCell align="center">{item[2]}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -141,16 +142,20 @@ export default function AvailableTable(props) {
                     position: "relative",
                   }}
                 >
-                  <TableCell
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%,-50%)",
-                    }}
-                  >
-                    {`No ${type} assets available`}
-                  </TableCell>
+                  {rows.length === 0 ? (
+                    <TableCell
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%,-50%)",
+                      }}
+                    >
+                      {`No ${type} assets available`}
+                    </TableCell>
+                  ) : (
+                    <TableCell colspan={6} />
+                  )}
                 </TableRow>
               )}
             </TableBody>

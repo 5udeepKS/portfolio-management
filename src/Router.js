@@ -42,6 +42,7 @@ export default function Router() {
         >
           <Route path="/dashboard/" element={<Dashboard />} />
           <Route path="/dashboard/view-assets" element={<ViewAssets />} />
+          <Route path="/dashboard/sell-assets" element={<ViewAssets />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
