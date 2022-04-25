@@ -86,11 +86,6 @@ export const assetsSlice = createSlice({
     dailyMutualFunds: [],
     total: 0,
   },
-  reducers: {
-    logOut: (state, action) => {
-      return { ...state, isLoggedIn: false };
-    },
-  },
   extraReducers: {
     [getUserStocksMFAsync.fulfilled]: (state, action) => {
       return {

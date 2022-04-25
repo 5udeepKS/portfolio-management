@@ -75,7 +75,7 @@ export default function CurrentPriceTable(props) {
 
   const [page, setPage] = useState(0);
 
-  const [rowsPerPage, setRowsPerPage] = useState(3);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     // dispatch(getDevicesAsync({ token }));
@@ -163,7 +163,7 @@ export default function CurrentPriceTable(props) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[3, 5]}
+          rowsPerPageOptions={[5, 10, 15]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
