@@ -5,8 +5,26 @@ const STOCKS_URL = process.env.REACT_APP_STOCKS_URL;
 const MF_URL = process.env.REACT_APP_MF_URL;
 const NET_URL = process.env.REACT_APP_NET_URL;
 
-export const getAllStocksAsync = createAsyncThunk(
+export const getUserStocksMFAsync = createAsyncThunk(
   "assets/getAllStocksAsync",
+  async (payload, { getState }) => {
+    const state = getState();
+    const token = `Bearer ${state.auth.token}`;
+    try {
+      const res = await axios.get(`${NET_URL}/calculateNetworth/viewAsset`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      return res.data;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
+export const getDailyAllStocksAsync = createAsyncThunk(
+  "assets/getDailyAllStocksAsync",
   async (payload, { getState }) => {
     const state = getState();
     const token = `Bearer ${state.auth.token}`;
@@ -23,8 +41,8 @@ export const getAllStocksAsync = createAsyncThunk(
   }
 );
 
-export const getAllMutualFundsAsync = createAsyncThunk(
-  "assets/getAllMutualFundsAsync",
+export const getDailyAllMutualFundsAsync = createAsyncThunk(
+  "assets/getDailyAllMutualFundsAsync",
   async (payload, { getState }) => {
     const state = getState();
     const token = `Bearer ${state.auth.token}`;
@@ -61,21 +79,34 @@ export const getTotalNetworthAsync = createAsyncThunk(
 
 export const assetsSlice = createSlice({
   name: "assets",
-  initialState: { stocks: [], mutualFunds: [], total: 0 },
+  initialState: {
+    stocks: [],
+    mutualFunds: [],
+    dailyStocks: [],
+    dailyMutualFunds: [],
+    total: 0,
+  },
   reducers: {
     logOut: (state, action) => {
       return { ...state, isLoggedIn: false };
     },
   },
   extraReducers: {
-    [getAllStocksAsync.fulfilled]: (state, action) => {
-      return { ...state, stocks: action.payload };
-    },
-    [getAllMutualFundsAsync.fulfilled]: (state, action) => {
-      return { ...state, mutualFunds: action.payload };
+    [getUserStocksMFAsync.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        stocks: action.payload.stockDetailList,
+        mutualFunds: action.payload.mutualFundList,
+      };
     },
     [getTotalNetworthAsync.fulfilled]: (state, action) => {
       return { ...state, total: action.payload };
+    },
+    [getDailyAllStocksAsync.fulfilled]: (state, action) => {
+      return { ...state, dailyStocks: action.payload };
+    },
+    [getDailyAllMutualFundsAsync.fulfilled]: (state, action) => {
+      return { ...state, dailyMutualFunds: action.payload };
     },
   },
 });

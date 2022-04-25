@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AvailableTable from "./AvailableTable";
 import TotalAsset from "./TotalAsset";
 import {
-  getAllStocksAsync,
-  getAllMutualFundsAsync,
+  getUserStocksMFAsync,
   getTotalNetworthAsync,
 } from "../../../redux/assetsSlice";
 
@@ -17,8 +16,7 @@ export default function ViewAssets() {
   const totalNetworth = useSelector((state) => state.assets.total);
 
   useEffect(() => {
-    dispatch(getAllStocksAsync());
-    dispatch(getAllMutualFundsAsync());
+    dispatch(getUserStocksMFAsync());
     dispatch(getTotalNetworthAsync());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

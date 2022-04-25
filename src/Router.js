@@ -9,6 +9,7 @@ import Snackbar from "./components/snackbar/Snackbar";
 import { DashboardOutlet } from "./pages/dashboard/Dashboard";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ViewAssets from "./pages/dashboard/viewAssets/ViewAssets";
+import CurrentPrice from "./pages/dashboard/currentPrice/CurrentPrice";
 
 export default function Router() {
   const [snackbarProps, setSnackbarProps] = useState({
@@ -42,7 +43,7 @@ export default function Router() {
         >
           <Route path="/dashboard/" element={<Dashboard />} />
           <Route path="/dashboard/view-assets" element={<ViewAssets />} />
-          <Route path="/dashboard/sell-assets" element={<ViewAssets />} />
+          <Route path="/dashboard/current-price" element={<CurrentPrice />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
