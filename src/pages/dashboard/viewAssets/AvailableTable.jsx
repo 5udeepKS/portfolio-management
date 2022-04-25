@@ -75,7 +75,7 @@ export default function AvailableTable(props) {
 
   const [page, setPage] = useState(0);
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(3);
 
   useEffect(() => {
     // dispatch(getDevicesAsync({ token }));
@@ -120,7 +120,7 @@ export default function AvailableTable(props) {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   return (
-                    <TableRow hover tabIndex={-1} key={row.name}>
+                    <TableRow hover tabIndex={-1} key={index}>
                       <TableCell
                         component="th"
                         scope="row"
@@ -141,7 +141,7 @@ export default function AvailableTable(props) {
                     position: "relative",
                   }}
                 >
-                  <Typography
+                  <TableCell
                     sx={{
                       position: "absolute",
                       top: "50%",
@@ -150,15 +150,14 @@ export default function AvailableTable(props) {
                     }}
                   >
                     {`No ${type} assets available`}
-                  </Typography>
-                  <TableCell colSpan={6} />
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[3, 5]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

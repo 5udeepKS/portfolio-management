@@ -11,7 +11,7 @@ export const getAllStocksAsync = createAsyncThunk(
     const state = getState();
     const token = `Bearer ${state.auth.token}`;
     try {
-      const res = await axios.post(`${STOCKS_URL}/DailySharePrice/allstock`, {
+      const res = await axios.get(`${STOCKS_URL}/DailySharePrice/allstock`, {
         headers: {
           Authorization: token,
         },
@@ -29,7 +29,7 @@ export const getAllMutualFundsAsync = createAsyncThunk(
     const state = getState();
     const token = `Bearer ${state.auth.token}`;
     try {
-      const res = await axios.post(`${MF_URL}/DailyMutualFundNAV/allmf`, {
+      const res = await axios.get(`${MF_URL}/DailyMutualFundNAV/allmf`, {
         headers: {
           Authorization: token,
         },
@@ -47,7 +47,7 @@ export const getTotalNetworthAsync = createAsyncThunk(
     const state = getState();
     const token = `Bearer ${state.auth.token}`;
     try {
-      const res = await axios.post(`${NET_URL}/calculateNetworth`, {
+      const res = await axios.get(`${NET_URL}/calculateNetworth/`, {
         headers: {
           Authorization: token,
         },
