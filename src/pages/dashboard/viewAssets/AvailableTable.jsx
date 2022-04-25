@@ -119,7 +119,7 @@ export default function AvailableTable(props) {
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const item = Object.keys(row);
+                  const item = Object.values(row);
                   return (
                     <TableRow hover tabIndex={-1} key={index}>
                       <TableCell
