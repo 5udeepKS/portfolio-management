@@ -10,6 +10,7 @@ import Snackbar from "./components/snackbar/Snackbar";
 import { DashboardOutlet } from "./pages/dashboard/Dashboard";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ViewAssets from "./pages/dashboard/viewAssets/ViewAssets";
+import SellAssets from "./pages/dashboard/sellAssets/SellAssets";
 import CurrentPrice from "./pages/dashboard/currentPrice/CurrentPrice";
 import AlertDialog from "./components/alertDialog/AlertDialog";
 import { logOut } from "./redux/authSlice";
@@ -61,6 +62,10 @@ export default function Router() {
           <Route
             path="/dashboard/view-assets"
             element={<ViewAssets handleAlertOpen={handleAlertOpen} />}
+          />
+          <Route
+            path="/dashboard/sell-assets"
+            element={<SellAssets handleAlertOpen={handleAlertOpen} />}
           />
           <Route
             path="/dashboard/current-price"

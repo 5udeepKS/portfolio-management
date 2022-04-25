@@ -20,7 +20,12 @@ export default function CurrentPrice() {
 
   return (
     <Box
-      sx={{ heigth: "80vh", display: "grid", gridTemplateColumns: "1fr 1fr" }}
+      sx={{
+        height: "80vh",
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        alignContent: "center",
+      }}
     >
       <CurrentPriceTable
         type="Daily Stock Price"
