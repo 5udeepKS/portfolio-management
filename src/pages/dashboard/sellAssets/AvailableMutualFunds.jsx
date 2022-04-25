@@ -11,26 +11,40 @@ import {
   TableHead,
   Toolbar,
   TablePagination,
+  Checkbox,
+  TextField,
 } from "@mui/material";
 
 const headCells = [
   {
-    id: "name",
+    id: "checkbox",
     align: "center",
     disablePadding: true,
-    label: "Name",
+    label: "Checkbox",
   },
   {
-    id: "count",
+    id: "asset",
     align: "center",
     disablePadding: false,
-    label: "Count",
+    label: "Asset",
+  },
+  {
+    id: "available-units",
+    align: "center",
+    disablePadding: false,
+    label: "Available Units",
   },
   {
     id: "current-price",
     align: "center",
     disablePadding: false,
     label: "Current Price",
+  },
+  {
+    id: "units-to-be-sold",
+    align: "center",
+    disablePadding: false,
+    label: "Units to be Sold",
   },
 ];
 
@@ -71,7 +85,7 @@ const EnhancedTableToolbar = (props) => {
 };
 
 export default function AvailableMutualFunds(props) {
-  const { type, style, rows } = props;
+  const { type, style, rows, setAssetsBeingSold, assetsBeingSold } = props;
 
   const [page, setPage] = useState(0);
 
@@ -84,6 +98,23 @@ export default function AvailableMutualFunds(props) {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const isPresentInAssetsBeingSold = (mfId) => {
+    return assetsBeingSold.some((mf) => mf.mfId === mfId);
+  };
+
+  const handleCheckedChange = (asset, isChecked) => {
+    const assetValue = Object.values(asset)[0];
+    if (isChecked) {
+      setAssetsBeingSold([...assetsBeingSold, asset]);
+    } else {
+      const filteredAssetsBeingSold = assetsBeingSold.filter((assetItem) => {
+        const assetItemValue = Object.values(assetItem)[0];
+        return assetItemValue !== assetValue;
+      });
+      setAssetsBeingSold(filteredAssetsBeingSold);
+    }
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -116,7 +147,8 @@ export default function AvailableMutualFunds(props) {
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const item = Object.values(row);
+                  const item = Object.entries(row);
+
                   return (
                     <TableRow hover tabIndex={-1} key={index}>
                       <TableCell
@@ -125,10 +157,19 @@ export default function AvailableMutualFunds(props) {
                         padding="none"
                         align="center"
                       >
-                        {item[0]}
+                        <Checkbox
+                          checked={isPresentInAssetsBeingSold(item[0][1])}
+                          onChange={(e) =>
+                            handleCheckedChange(row, e.target.checked)
+                          }
+                        />
                       </TableCell>
-                      <TableCell align="center">{item[1]}</TableCell>
-                      <TableCell align="center">{item[2]}</TableCell>
+                      <TableCell align="center">{item[1][1]}</TableCell>
+                      <TableCell align="center">{item[2][1]}</TableCell>
+                      <TableCell align="center">{item[3][1]}</TableCell>
+                      <TableCell align="center">
+                        <TextField type="number" size="small" />
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -151,7 +192,7 @@ export default function AvailableMutualFunds(props) {
                       {`No ${type} assets available`}
                     </TableCell>
                   ) : (
-                    <TableCell colspan={6} />
+                    <TableCell colSpan={5} />
                   )}
                 </TableRow>
               )}
