@@ -1,9 +1,13 @@
 import React from "react";
 import { Box, Paper, Divider, Typography, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 
 import dashboardLinks from "../../assets/links/dashboardLinks";
 import analyticsImage from "../../assets/images/analytics.png";
+
+export function DashboardOutlet() {
+  return <Outlet />;
+}
 
 export default function Dashboard() {
   const navigate = useNavigate();

@@ -12,6 +12,7 @@ export const loginUserAsync = createAsyncThunk(
     } catch (e) {
       console.log(e);
     }
+    return { jwttoken: "123" };
   }
 );
 

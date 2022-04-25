@@ -5,8 +5,10 @@ import Auth from "./auth/Auth";
 import Home from "./pages/home/Home";
 import NotFound from "./pages/notFound/NotFound";
 import Login from "./pages/login/Login";
-import Dashboard from "./pages/dashboard/Dashboard";
 import Snackbar from "./components/snackbar/Snackbar";
+import { DashboardOutlet } from "./pages/dashboard/Dashboard";
+import Dashboard from "./pages/dashboard/Dashboard";
+import ViewAssets from "./pages/dashboard/viewAssets/ViewAssets";
 
 export default function Router() {
   const [snackbarProps, setSnackbarProps] = useState({
@@ -34,10 +36,13 @@ export default function Router() {
           path="/dashboard"
           element={
             <Auth>
-              <Dashboard />
+              <DashboardOutlet />
             </Auth>
           }
-        />
+        >
+          <Route path="/dashboard/" element={<Dashboard />} />
+          <Route path="/dashboard/view-assets" element={<ViewAssets />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Snackbar

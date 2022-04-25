@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authSlice from "./authSlice";
 import {
   persistReducer,
   FLUSH,
@@ -12,12 +11,15 @@ import {
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 
+import authSlice from "./authSlice";
+import assetsSlice from "./assetsSlice";
+
 const persistConfig = {
   key: "portfolio",
   storage,
 };
 
-const reducers = combineReducers({ auth: authSlice });
+const reducers = combineReducers({ auth: authSlice, assets: assetsSlice });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 

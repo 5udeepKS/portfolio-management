@@ -1,16 +1,16 @@
 const dashboardLinks = [
   {
-    path: "/current-price",
+    path: "/dashboard/current-price",
     text: "Current Market Price of Stock & Share",
     btnText: "View Price",
   },
   {
-    path: "/view-assets",
+    path: "/dashboard/view-assets",
     text: "Calculate Assets",
     btnText: "View Assets",
   },
   {
-    path: "/sell-assets",
+    path: "/dashboard/sell-assets",
     text: "Sell Stock & Mutual Fund",
     btnText: "Sell Assets",
   },
