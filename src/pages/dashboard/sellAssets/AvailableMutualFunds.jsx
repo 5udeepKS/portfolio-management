@@ -85,7 +85,7 @@ const EnhancedTableToolbar = (props) => {
 };
 
 export default function AvailableMutualFunds(props) {
-  const { type, style, rows, setAssetsBeingSold, assetsBeingSold } = props;
+  const { type, style, mfBeingSold, setMFBeingSold, setSnackbarProps } = props;
 
   const [page, setPage] = useState(0);
 
@@ -100,34 +100,61 @@ export default function AvailableMutualFunds(props) {
     setPage(0);
   };
 
-  const isPresentInAssetsBeingSold = (mfId) => {
-    return assetsBeingSold.some((mf) => mf.mfId === mfId);
+  const handleCheckedChange = (mutualFund, checked) => {
+    const updatedMutualFund = {
+      ...mutualFund,
+      checked: checked,
+      sellCount: checked ? mutualFund.sellCount : 0,
+    };
+
+    const updatedMfBeingSold = mfBeingSold.map((mf) => {
+      if (mf.mfId === mutualFund.mfId) {
+        return updatedMutualFund;
+      }
+      return mf;
+    });
+
+    setMFBeingSold(updatedMfBeingSold);
   };
 
-  const handleCheckedChange = (asset, isChecked) => {
-    const assetValue = Object.values(asset)[0];
-    if (isChecked) {
-      setAssetsBeingSold([...assetsBeingSold, asset]);
-    } else {
-      const filteredAssetsBeingSold = assetsBeingSold.filter((assetItem) => {
-        const assetItemValue = Object.values(assetItem)[0];
-        return assetItemValue !== assetValue;
+  const handleSellCountChange = (e, mutualFund) => {
+    const value = parseInt(e.target.value);
+    const exceedsAvailableCount = value > mutualFund.mutualFundUnits;
+    if (exceedsAvailableCount) {
+      setSnackbarProps({
+        open: true,
+        severity: "error",
+        msg: "Entered count exceeds available count",
       });
-      setAssetsBeingSold(filteredAssetsBeingSold);
     }
+    const updatedMutualFund = {
+      ...mutualFund,
+      sellCount: exceedsAvailableCount ? 0 : value,
+      checked: exceedsAvailableCount ? false : true,
+    };
+    const updatedMfBeingSold = mfBeingSold.map((mf, idx) => {
+      if (mf.mfId === mutualFund.mfId) {
+        return updatedMutualFund;
+      }
+      return mf;
+    });
+
+    setMFBeingSold(updatedMfBeingSold);
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page >= 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length - 1) : 0;
+    page >= 0
+      ? Math.max(0, (1 + page) * rowsPerPage - mfBeingSold.length - 1)
+      : 0;
 
   return (
     <Box
       sx={{
         ...style,
-        flex: 1,
-        my: 2,
-        height: "100%",
+        height: "95%",
+        width: "60%",
+        minWidth: 756,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -142,13 +169,11 @@ export default function AvailableMutualFunds(props) {
             aria-labelledby="tableTitle"
             size="small"
           >
-            <EnhancedTableHead rowCount={rows.length} />
+            <EnhancedTableHead rowCount={mfBeingSold.length} />
             <TableBody>
-              {rows
+              {mfBeingSold
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const item = Object.entries(row);
-
                   return (
                     <TableRow hover tabIndex={-1} key={index}>
                       <TableCell
@@ -158,17 +183,25 @@ export default function AvailableMutualFunds(props) {
                         align="center"
                       >
                         <Checkbox
-                          checked={isPresentInAssetsBeingSold(item[0][1])}
+                          checked={row.checked}
                           onChange={(e) =>
                             handleCheckedChange(row, e.target.checked)
                           }
                         />
                       </TableCell>
-                      <TableCell align="center">{item[1][1]}</TableCell>
-                      <TableCell align="center">{item[2][1]}</TableCell>
-                      <TableCell align="center">{item[3][1]}</TableCell>
+                      <TableCell align="center">{row.mutualFundName}</TableCell>
                       <TableCell align="center">
-                        <TextField type="number" size="small" />
+                        {row.mutualFundUnits}
+                      </TableCell>
+                      <TableCell align="center">{row.mfValue}</TableCell>
+                      <TableCell align="center">
+                        <TextField
+                          type="number"
+                          size="small"
+                          value={row.sellCount}
+                          onChange={(e) => handleSellCountChange(e, row)}
+                          disabled={!row.checked}
+                        />
                       </TableCell>
                     </TableRow>
                   );
@@ -180,7 +213,7 @@ export default function AvailableMutualFunds(props) {
                     position: "relative",
                   }}
                 >
-                  {rows.length === 0 ? (
+                  {mfBeingSold.length === 0 ? (
                     <TableCell
                       sx={{
                         position: "absolute",
@@ -202,7 +235,7 @@ export default function AvailableMutualFunds(props) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 15]}
           component="div"
-          count={rows.length}
+          count={mfBeingSold.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

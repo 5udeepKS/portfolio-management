@@ -65,7 +65,12 @@ export default function Router() {
           />
           <Route
             path="/dashboard/sell-assets"
-            element={<SellAssets handleAlertOpen={handleAlertOpen} />}
+            element={
+              <SellAssets
+                handleAlertOpen={handleAlertOpen}
+                setSnackbarProps={setSnackbarProps}
+              />
+            }
           />
           <Route
             path="/dashboard/current-price"
