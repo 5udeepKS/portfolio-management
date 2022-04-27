@@ -77,6 +77,28 @@ export const getTotalNetworthAsync = createAsyncThunk(
   }
 );
 
+export const sellAssetsAsync = createAsyncThunk(
+  "assets/sellAssetsAsync",
+  async (payload, { getState }) => {
+    const state = getState();
+    const token = `Bearer ${state.auth.token}`;
+    try {
+      const res = await axios.post(
+        `${NET_URL}/calculateNetworth/sellAssets`,
+        payload,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      return res.data.networth;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
 export const assetsSlice = createSlice({
   name: "assets",
   initialState: {
@@ -102,6 +124,9 @@ export const assetsSlice = createSlice({
     },
     [getDailyAllMutualFundsAsync.fulfilled]: (state, action) => {
       return { ...state, dailyMutualFunds: action.payload };
+    },
+    [sellAssetsAsync.fulfilled]: (state, action) => {
+      return { ...state, total: action.payload };
     },
   },
 });

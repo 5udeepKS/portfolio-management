@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
 
@@ -13,8 +13,6 @@ import {
 
 export default function SellAssets(props) {
   const dispatch = useDispatch();
-
-  const initialLoad = useRef(true);
 
   const { handleAlertOpen, setSnackbarProps } = props;
 
@@ -97,7 +95,7 @@ export default function SellAssets(props) {
       })
       .catch((e) => {
         console.log(e);
-        // handleAlertOpen();
+        handleAlertOpen();
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -144,6 +142,10 @@ export default function SellAssets(props) {
         type="Selected Units"
         assetsBeingSold={assetsBeingSold}
         setAssetsBeingSold={setAssetsBeingSold}
+        stocksBeingSold={stocksBeingSold ? stocksBeingSold : []}
+        setStocksBeingSold={setStocksBeingSold}
+        mfBeingSold={mfBeingSold ? mfBeingSold : []}
+        setMFBeingSold={setMFBeingSold}
         setSnackbarProps={setSnackbarProps}
       />
     </Box>

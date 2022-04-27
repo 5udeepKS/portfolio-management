@@ -11,7 +11,11 @@ import {
   TableHead,
   Toolbar,
   TablePagination,
+  Button,
 } from "@mui/material";
+import { useDispatch } from "react-redux";
+
+import { sellAssetsAsync } from "../../../redux/assetsSlice";
 
 const headCells = [
   {
@@ -65,7 +69,19 @@ const EnhancedTableToolbar = (props) => {
 };
 
 export default function AssetsBeingSold(props) {
-  const { type, style, assetsBeingSold } = props;
+  const {
+    type,
+    style,
+    assetsBeingSold,
+    setSnackbarProps,
+    setAssetsBeingSold,
+    stocksBeingSold,
+    setStocksBeingSold,
+    mfBeingSold,
+    setMFBeingSold,
+  } = props;
+
+  const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
 
@@ -78,6 +94,73 @@ export default function AssetsBeingSold(props) {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleSell = () => {
+    // [{assetName:"..",soldUnits:0}]
+    const assetsToSell = assetsBeingSold.map((asset) => {
+      const keys = Object.keys(asset);
+
+      if (!(asset.sellCount === 0 || isNaN(asset.sellCount))) {
+        return {
+          assetName: keys.includes("stockName")
+            ? asset.stockName
+            : asset.mutualFundName,
+          soldUnits: asset.sellCount,
+        };
+      } else {
+        return undefined;
+      }
+    });
+
+    const filteredAssetsToSell = assetsToSell.filter(
+      (asset) => asset !== undefined
+    );
+
+    dispatch(sellAssetsAsync([...filteredAssetsToSell]))
+      .unwrap()
+      .then(() => {
+        setSnackbarProps({
+          open: true,
+          severity: "success",
+          msg: "Assets Sold Successfully",
+        });
+        setAssetsBeingSold([]);
+        const updatedStocksBeingSold = stocksBeingSold.map((stock) => {
+          if (
+            stock.checked &&
+            stock.sellCount !== 0 &&
+            !isNaN(stock.sellCount)
+          ) {
+            return {
+              ...stock,
+              checked: false,
+              stockCount: stock.stockCount - stock.sellCount,
+            };
+          }
+          return { ...stock, checked: false };
+        });
+        const updatedMFBeingSold = mfBeingSold.map((mf) => {
+          if (mf.checked && mf.sellCount !== 0 && !isNaN(mf.sellCount)) {
+            return {
+              ...mf,
+              checked: false,
+              mutualFundUnits: mf.mutualFundUnits - mf.sellCount,
+            };
+          }
+          return { ...mf, checked: false };
+        });
+        setStocksBeingSold(updatedStocksBeingSold);
+        setMFBeingSold(updatedMFBeingSold);
+      })
+      .catch((e) => {
+        console.log(e);
+        setSnackbarProps({
+          open: true,
+          severity: "error",
+          msg: "Failed to Sell Assets, Try Again!",
+        });
+      });
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -97,6 +180,7 @@ export default function AssetsBeingSold(props) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        flexDirection: "column",
       }}
     >
       <Paper sx={{ width: "90%", height: "100%", mb: 2 }} elevation={5}>
@@ -168,6 +252,10 @@ export default function AssetsBeingSold(props) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+
+      <Button variant="contained" onClick={handleSell}>
+        Sell
+      </Button>
     </Box>
   );
 }

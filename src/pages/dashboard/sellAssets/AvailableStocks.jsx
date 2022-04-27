@@ -146,11 +146,11 @@ export default function AvailableStocks(props) {
   const handleOnBlurred = (stock) => {
     if (isNaN(stock.sellCount)) {
       const updatedStock = { ...stock, sellCount: 0, checked: false };
-      const updatedStocksBeingSold = stocksBeingSold.map((mf) => {
-        if (mf.mfId === stock.mfId) {
+      const updatedStocksBeingSold = stocksBeingSold.map((stk) => {
+        if (stk.stId === stock.stId) {
           return updatedStock;
         }
-        return mf;
+        return stk;
       });
       setStocksBeingSold(updatedStocksBeingSold);
     }
