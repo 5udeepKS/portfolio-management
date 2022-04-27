@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
 
 import AvailableStocks from "./AvailableStocks";
 import AvailableMutualFunds from "./AvailableMutualFunds";
-// import StocksBeingSold from "./StocksBeingSold";
+import AssetsBeingSold from "./AssetsBeingSold";
 import {
   getUserStocksMFAsync,
   getDailyAllMutualFundsAsync,
@@ -14,8 +14,11 @@ import {
 export default function SellAssets(props) {
   const dispatch = useDispatch();
 
+  const initialLoad = useRef(true);
+
   const { handleAlertOpen, setSnackbarProps } = props;
 
+  const [assetsBeingSold, setAssetsBeingSold] = useState([]);
   const [stocksBeingSold, setStocksBeingSold] = useState([]);
   const [mfBeingSold, setMFBeingSold] = useState([]);
 
@@ -99,6 +102,18 @@ export default function SellAssets(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    let selectedStocks = [];
+    let selectedMfs = [];
+    if (stocksBeingSold.length > 0) {
+      selectedStocks = stocksBeingSold.filter((stock) => stock.checked);
+    }
+    if (mfBeingSold.length > 0) {
+      selectedMfs = mfBeingSold.filter((mf) => mf.checked);
+    }
+    setAssetsBeingSold([...selectedStocks, ...selectedMfs]);
+  }, [stocksBeingSold, mfBeingSold]);
+
   return (
     <Box
       sx={{
@@ -124,7 +139,13 @@ export default function SellAssets(props) {
         setMFBeingSold={setMFBeingSold}
         setSnackbarProps={setSnackbarProps}
       />
-      {/* <StocksBeingSold style={{ gridArea: "selected" }} /> */}
+      <AssetsBeingSold
+        style={{ gridArea: "selected" }}
+        type="Selected Units"
+        assetsBeingSold={assetsBeingSold}
+        setAssetsBeingSold={setAssetsBeingSold}
+        setSnackbarProps={setSnackbarProps}
+      />
     </Box>
   );
 }

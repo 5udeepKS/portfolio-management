@@ -78,7 +78,7 @@ const EnhancedTableToolbar = (props) => {
       }}
     >
       <Typography sx={{}} variant="h6" id="tableTitle">
-        {`Your Available ${type} `}
+        {type}
       </Typography>
     </Toolbar>
   );
@@ -143,6 +143,19 @@ export default function AvailableStocks(props) {
     setStocksBeingSold(updatedStocksBeingSold);
   };
 
+  const handleOnBlurred = (stock) => {
+    if (isNaN(stock.sellCount)) {
+      const updatedStock = { ...stock, sellCount: 0, checked: false };
+      const updatedStocksBeingSold = stocksBeingSold.map((mf) => {
+        if (mf.mfId === stock.mfId) {
+          return updatedStock;
+        }
+        return mf;
+      });
+      setStocksBeingSold(updatedStocksBeingSold);
+    }
+  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page >= 0
@@ -198,8 +211,11 @@ export default function AvailableStocks(props) {
                         <TextField
                           type="number"
                           size="small"
-                          value={row.sellCount}
+                          value={row.sellCount.toString()}
                           onChange={(e) => handleSellCountChange(e, row)}
+                          onBlur={() => {
+                            handleOnBlurred(row);
+                          }}
                           disabled={!row.checked}
                         />
                       </TableCell>
